@@ -51,6 +51,12 @@ const Dashboard = () => {
           </div>
 
           <div className="flex gap-3">
+            <Link to="/pro-dashboard">
+              <Button variant="outline" size="sm">
+                <Sparkles className="w-4 h-4" />
+                Mode Pro
+              </Button>
+            </Link>
             <Link to="/profile">
               <Button variant="outline" size="sm">
                 <User className="w-4 h-4" />

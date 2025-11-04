@@ -2,16 +2,24 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
+import NotificationBell from "@/components/shared/NotificationBell";
+import ThemeToggle from "@/components/shared/ThemeToggle";
+import LanguageSelector from "@/components/shared/LanguageSelector";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isAuthPage = location.pathname === "/auth";
 
+  const isDashboard = location.pathname.includes("/dashboard") || 
+                     location.pathname === "/profile" ||
+                     location.pathname === "/wellbeing";
+
   const navLinks = [
     { label: "Accueil", path: "/" },
     { label: "Découvrir", path: "/professionals" },
     { label: "Communauté", path: "/community" },
+    { label: "Partenaires", path: "/partners" },
   ];
 
   return (
@@ -41,19 +49,24 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Auth Buttons */}
-          {!isAuthPage && (
-            <div className="hidden md:flex items-center gap-3">
-              <Link to="/auth">
-                <Button variant="ghost">Se connecter</Button>
-              </Link>
-              <Link to="/auth">
-                <Button className="gradient-hero shadow-soft">
-                  Commencer
-                </Button>
-              </Link>
-            </div>
-          )}
+          {/* Right Section */}
+          <div className="hidden md:flex items-center gap-2">
+            <LanguageSelector />
+            <ThemeToggle />
+            {isDashboard && <NotificationBell />}
+            {!isAuthPage && !isDashboard && (
+              <>
+                <Link to="/auth">
+                  <Button variant="ghost">Se connecter</Button>
+                </Link>
+                <Link to="/auth">
+                  <Button className="gradient-hero shadow-soft">
+                    Commencer
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
           <button

@@ -11,7 +11,10 @@ import Community from "./pages/Community";
 import Wellbeing from "./pages/Wellbeing";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
+import Partners from "./pages/Partners";
+import ProDashboard from "./pages/ProDashboard";
 import NotFound from "./pages/NotFound";
+import Chatbot from "./components/shared/Chatbot";
 
 const queryClient = new QueryClient();
 
@@ -30,9 +33,12 @@ const App = () => (
           <Route path="/wellbeing" element={<Wellbeing />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/pro-dashboard" element={<ProDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Chatbot />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
