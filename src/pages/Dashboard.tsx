@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useRole } from "@/hooks/useRole";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Navbar from "@/components/layout/Navbar";
@@ -16,6 +18,17 @@ import {
 } from "lucide-react";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const { role } = useRole();
+
+  useEffect(() => {
+    if (role === "professional") {
+      navigate("/pro-dashboard");
+    } else if (role === "admin") {
+      navigate("/admin-dashboard");
+    }
+  }, [role, navigate]);
+
   const upcomingSession = {
     therapist: "Dr. Amina Bennani",
     date: "Vendredi 15 Mars",

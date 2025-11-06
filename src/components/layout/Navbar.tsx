@@ -5,11 +5,14 @@ import { useState } from "react";
 import NotificationBell from "@/components/shared/NotificationBell";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import LanguageSelector from "@/components/shared/LanguageSelector";
+import RoleSelector from "@/components/shared/RoleSelector";
+import { useRole } from "@/hooks/useRole";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isAuthPage = location.pathname === "/auth";
+  const { role, switchRole } = useRole();
 
   const isDashboard = location.pathname.includes("/dashboard") || 
                      location.pathname === "/profile" ||
@@ -53,7 +56,12 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-2">
             <LanguageSelector />
             <ThemeToggle />
-            {isDashboard && <NotificationBell />}
+            {isDashboard && (
+              <>
+                <NotificationBell />
+                <RoleSelector currentRole={role} onRoleChange={switchRole} />
+              </>
+            )}
             {!isAuthPage && !isDashboard && (
               <>
                 <Link to="/auth">
