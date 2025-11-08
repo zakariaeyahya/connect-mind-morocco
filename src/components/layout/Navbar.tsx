@@ -5,25 +5,54 @@ import { useState } from "react";
 import NotificationBell from "@/components/shared/NotificationBell";
 import ThemeToggle from "@/components/shared/ThemeToggle";
 import LanguageSelector from "@/components/shared/LanguageSelector";
-import RoleSelector from "@/components/shared/RoleSelector";
 import { useRole } from "@/hooks/useRole";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isAuthPage = location.pathname === "/auth";
-  const { role, switchRole } = useRole();
+  const { role } = useRole();
 
   const isDashboard = location.pathname.includes("/dashboard") || 
                      location.pathname === "/profile" ||
+                     location.pathname === "/pro-dashboard" ||
+                     location.pathname === "/admin-dashboard" ||
+                     location.pathname === "/calendar" ||
+                     location.pathname === "/messages" ||
                      location.pathname === "/wellbeing";
 
-  const navLinks = [
-    { label: "Accueil", path: "/" },
-    { label: "Découvrir", path: "/professionals" },
-    { label: "Communauté", path: "/community" },
-    { label: "Partenaires", path: "/partners" },
-  ];
+  // Define role-specific navigation
+  const getNavLinks = () => {
+    if (role === "user") {
+      return [
+        { label: "Découvrir", path: "/dashboard" },
+        { label: "Professionnels", path: "/professionals" },
+        { label: "Communauté", path: "/community" },
+        { label: "Bien-être", path: "/wellbeing" },
+        { label: "Partenaires", path: "/partners" },
+      ];
+    } else if (role === "professional") {
+      return [
+        { label: "Tableau de bord", path: "/pro-dashboard" },
+        { label: "Calendrier", path: "/calendar" },
+        { label: "Messages", path: "/messages" },
+      ];
+    } else if (role === "admin") {
+      return [
+        { label: "Tableau de bord", path: "/admin-dashboard" },
+        { label: "Calendrier", path: "/calendar" },
+      ];
+    }
+    // Default for non-logged in users
+    return [
+      { label: "Accueil", path: "/" },
+      { label: "Découvrir", path: "/professionals" },
+      { label: "Communauté", path: "/community" },
+      { label: "Partenaires", path: "/partners" },
+    ];
+  };
+
+  const navLinks = getNavLinks();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -56,12 +85,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-2">
             <LanguageSelector />
             <ThemeToggle />
-            {isDashboard && (
-              <>
-                <NotificationBell />
-                <RoleSelector currentRole={role} onRoleChange={switchRole} />
-              </>
-            )}
+            {isDashboard && <NotificationBell />}
             {!isAuthPage && !isDashboard && (
               <>
                 <Link to="/auth">

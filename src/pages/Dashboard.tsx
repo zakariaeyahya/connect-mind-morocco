@@ -37,14 +37,16 @@ const Dashboard = () => {
   };
 
   const moodData = [
-    { day: "Lun", score: 7 },
-    { day: "Mar", score: 6 },
-    { day: "Mer", score: 8 },
-    { day: "Jeu", score: 7 },
-    { day: "Ven", score: 9 },
-    { day: "Sam", score: 8 },
-    { day: "Dim", score: 8 }
+    { day: "Lun", score: 6, emoji: "😊" },
+    { day: "Mar", score: 5, emoji: "😐" },
+    { day: "Mer", score: 8, emoji: "😄" },
+    { day: "Jeu", score: 7, emoji: "😊" },
+    { day: "Ven", score: 9, emoji: "😍" },
+    { day: "Sam", score: 8, emoji: "😄" },
+    { day: "Dim", score: 7, emoji: "😊" }
   ];
+
+  const weeklyAverage = Math.round(moodData.reduce((sum, day) => sum + day.score, 0) / moodData.length);
 
   return (
     <div className="min-h-screen gradient-subtle">
@@ -64,12 +66,6 @@ const Dashboard = () => {
           </div>
 
           <div className="flex gap-3">
-            <Link to="/pro-dashboard">
-              <Button variant="outline" size="sm">
-                <Sparkles className="w-4 h-4" />
-                Mode Pro
-              </Button>
-            </Link>
             <Link to="/profile">
               <Button variant="outline" size="sm">
                 <User className="w-4 h-4" />
@@ -142,16 +138,32 @@ const Dashboard = () => {
                 <TrendingUp className="w-6 h-6 text-accent" />
               </div>
 
-              <div className="flex items-end justify-between h-40 gap-2">
+              <div className="flex items-end justify-between h-48 gap-2">
                 {moodData.map((day, index) => (
-                  <div key={index} className="flex-1 flex flex-col items-center gap-2">
-                    <div
-                      className="w-full bg-gradient-to-t from-primary to-accent rounded-t-lg transition-smooth hover:opacity-80"
-                      style={{ height: `${day.score * 10}%` }}
-                    />
-                    <span className="text-xs text-muted-foreground">{day.day}</span>
+                  <div key={index} className="flex-1 flex flex-col items-center gap-2 group">
+                    <div className="relative w-full">
+                      <div
+                        className="w-full bg-gradient-to-t from-primary to-accent rounded-t-lg transition-smooth hover:opacity-80 cursor-pointer"
+                        style={{ height: `${day.score * 10}%`, minHeight: "40px" }}
+                      />
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-smooth">
+                        <span className="text-2xl">{day.emoji}</span>
+                      </div>
+                    </div>
+                    <span className="text-xs text-muted-foreground font-medium">{day.day}</span>
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="p-3 bg-primary/10 rounded-lg">
+                  <p className="text-xs text-muted-foreground mb-1">Moyenne</p>
+                  <p className="text-2xl font-bold text-primary">{weeklyAverage}/10</p>
+                </div>
+                <div className="p-3 bg-accent/10 rounded-lg">
+                  <p className="text-xs text-muted-foreground mb-1">Meilleur jour</p>
+                  <p className="text-2xl font-bold text-accent">Ven 😍</p>
+                </div>
               </div>
 
               <div className="mt-4 p-3 bg-accent/10 rounded-lg text-sm">

@@ -5,12 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart } from "lucide-react";
+import { Heart, User, Stethoscope, Shield } from "lucide-react";
 import { toast } from "sonner";
+import { UserRole } from "@/hooks/useRole";
 
 const Auth = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<UserRole>("user");
 
   const handleSubmit = async (e: React.FormEvent, action: "login" | "signup") => {
     e.preventDefault();
@@ -19,12 +21,27 @@ const Auth = () => {
     // Simulate auth
     setTimeout(() => {
       setIsLoading(false);
+      localStorage.setItem("minconnect-role", selectedRole);
       toast.success(
         action === "login" ? "Connexion réussie !" : "Compte créé avec succès !"
       );
-      navigate("/dashboard");
+      
+      // Redirect based on role
+      if (selectedRole === "professional") {
+        navigate("/pro-dashboard");
+      } else if (selectedRole === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     }, 1000);
   };
+
+  const roles = [
+    { value: "user" as UserRole, label: "Patient", icon: User, description: "Accéder à mon espace bien-être" },
+    { value: "professional" as UserRole, label: "Professionnel", icon: Stethoscope, description: "Gérer mes patients et séances" },
+    { value: "admin" as UserRole, label: "Administrateur", icon: Shield, description: "Superviser la plateforme" }
+  ];
 
   return (
     <div className="min-h-screen gradient-subtle flex items-center justify-center px-4 py-12">
@@ -45,6 +62,40 @@ const Auth = () => {
             <p className="text-muted-foreground">
               Bienvenue dans votre espace de bien-être
             </p>
+          </div>
+
+          {/* Role Selection */}
+          <div className="mb-6">
+            <Label className="text-sm font-medium mb-3 block">Je suis :</Label>
+            <div className="grid gap-3">
+              {roles.map((role) => {
+                const Icon = role.icon;
+                return (
+                  <button
+                    key={role.value}
+                    type="button"
+                    onClick={() => setSelectedRole(role.value)}
+                    className={`p-4 rounded-xl border-2 transition-smooth text-left ${
+                      selectedRole === role.value
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        selectedRole === role.value ? "bg-primary text-white" : "bg-muted"
+                      }`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold">{role.label}</p>
+                        <p className="text-xs text-muted-foreground">{role.description}</p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <Tabs defaultValue="login" className="w-full">
