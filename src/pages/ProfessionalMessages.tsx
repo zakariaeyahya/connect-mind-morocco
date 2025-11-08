@@ -6,11 +6,12 @@ import ChatWindow from "@/components/shared/ChatWindow";
 import { useChat } from "@/hooks/useChat";
 import { MessageCircle } from "lucide-react";
 
-const Messages = () => {
+const ProfessionalMessages = () => {
   const { conversations, getConversationMessages, sendMessage, markAsRead } = useChat();
   const [selectedConversation, setSelectedConversation] = useState<number | null>(null);
 
-  const currentUserId = 1; // Simulated current user
+  // Professional ID (simulated as user 2 - Dr. Amina Benali)
+  const currentUserId = 2;
 
   const handleSelectConversation = (id: number) => {
     setSelectedConversation(id);
@@ -19,7 +20,7 @@ const Messages = () => {
 
   const handleSendMessage = (content: string) => {
     if (selectedConversation) {
-      sendMessage(selectedConversation, currentUserId, "Zakariae El Amrani", content);
+      sendMessage(selectedConversation, currentUserId, "Dr. Amina Benali", content);
     }
   };
 
@@ -34,11 +35,11 @@ const Messages = () => {
         <div className="mb-6">
           <h1 className="text-3xl lg:text-4xl font-bold mb-2">
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Messagerie
+              Messagerie Professionnelle
             </span>
           </h1>
           <p className="text-muted-foreground">
-            Communiquez avec vos professionnels de santé mentale
+            Communiquez avec vos clients
           </p>
         </div>
 
@@ -65,7 +66,7 @@ const Messages = () => {
                   <MessageCircle className="w-20 h-20 text-muted-foreground/30 mb-4" />
                   <h3 className="text-xl font-semibold mb-2">Sélectionnez une conversation</h3>
                   <p className="text-muted-foreground">
-                    Choisissez une conversation pour commencer à discuter
+                    Choisissez un client pour commencer à discuter
                   </p>
                 </div>
               )}
@@ -79,4 +80,4 @@ const Messages = () => {
   );
 };
 
-export default Messages;
+export default ProfessionalMessages;

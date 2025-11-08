@@ -10,19 +10,23 @@ import {
   TrendingUp,
   AlertCircle,
   Shield,
-  ArrowLeft,
   Activity,
   MessageCircle,
+  X,
 } from "lucide-react";
+import { useState } from "react";
 import { users } from "@/data/users";
 import { professionals } from "@/data/professionals";
 import { appointments } from "@/data/appointments";
 import { adminLogs } from "@/data/adminLogs";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const AdminDashboard = () => {
   const { toast } = useToast();
+  const [selectedUser, setSelectedUser] = useState<typeof users[0] | null>(null);
+  const [selectedLog, setSelectedLog] = useState<typeof adminLogs[0] | null>(null);
 
   const stats = [
     { label: "Utilisateurs totaux", value: users.length.toString(), icon: Users, color: "text-primary" },
@@ -44,23 +48,25 @@ const AdminDashboard = () => {
 
       <div className="container mx-auto px-4 lg:px-8 pt-24 pb-12">
         {/* Header */}
-        <div className="mb-8 animate-slide-up">
-          <Link to="/dashboard">
-            <Button variant="ghost" size="sm" className="mb-4">
-              <ArrowLeft className="w-4 h-4" />
-              Retour au tableau de bord
-            </Button>
-          </Link>
-          <h1 className="text-3xl lg:text-4xl font-bold mb-2 flex items-center gap-2">
+        <div className="mb-8 animate-slide-up flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold mb-2 flex items-center gap-2">
             <Shield className="w-8 h-8 text-primary" />
             Tableau de bord{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Administrateur
             </span>
-          </h1>
-          <p className="text-muted-foreground">
-            Gestion et supervision de la plateforme MinConnect
-          </p>
+            </h1>
+            <p className="text-muted-foreground">
+              Gestion et supervision de la plateforme MinConnect
+            </p>
+          </div>
+          <Button variant="outline" onClick={() => {
+            localStorage.removeItem("minconnect-role");
+            window.location.href = "/auth";
+          }}>
+            Déconnexion
+          </Button>
         </div>
 
         {/* Stats Grid */}
@@ -145,7 +151,7 @@ const AdminDashboard = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleUserAction("Désactivation", user.id)}
+                          onClick={() => setSelectedUser(user)}
                         >
                           Gérer
                         </Button>
@@ -197,7 +203,8 @@ const AdminDashboard = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="p-3 rounded-lg bg-secondary hover:bg-muted/50 transition-smooth"
+                    className="p-3 rounded-lg bg-secondary hover:bg-muted/50 transition-smooth cursor-pointer"
+                    onClick={() => setSelectedLog(log)}
                   >
                     <div className="flex items-start gap-2">
                       <AlertCircle className="w-4 h-4 text-accent mt-1 flex-shrink-0" />
@@ -241,6 +248,127 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* User Details Sheet */}
+      <Sheet open={!!selectedUser} onOpenChange={() => setSelectedUser(null)}>
+        <SheetContent className="w-[400px] sm:w-[540px]">
+          <SheetHeader>
+            <SheetTitle>Détails de l'utilisateur</SheetTitle>
+          </SheetHeader>
+          {selectedUser && (
+            <div className="mt-6 space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent overflow-hidden">
+                  {selectedUser.avatar ? (
+                    <img src={selectedUser.avatar} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-white font-semibold text-2xl">
+                      {selectedUser.name[0]}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg">{selectedUser.name}</h3>
+                  <p className="text-sm text-muted-foreground">{selectedUser.email}</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">ID</label>
+                  <p className="text-sm mt-1">#{selectedUser.id}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Rôle</label>
+                  <p className="text-sm mt-1 capitalize">{selectedUser.role}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Statut</label>
+                  <p className="text-sm mt-1">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      selectedUser.active
+                        ? "bg-accent/10 text-accent"
+                        : "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+                    }`}>
+                      {selectedUser.active ? "Actif" : "Inactif"}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Premium</label>
+                  <p className="text-sm mt-1">
+                    {selectedUser.premium ? (
+                      <span className="px-2 py-1 rounded-full text-xs bg-gradient-to-r from-primary to-accent text-white">
+                        Oui
+                      </span>
+                    ) : (
+                      "Non"
+                    )}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => {
+                    handleUserAction("Désactivation", selectedUser.id);
+                    setSelectedUser(null);
+                  }}
+                >
+                  {selectedUser.active ? "Désactiver" : "Activer"} l'utilisateur
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-full"
+                  onClick={() => {
+                    handleUserAction("Suppression", selectedUser.id);
+                    setSelectedUser(null);
+                  }}
+                >
+                  Supprimer l'utilisateur
+                </Button>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+
+      {/* Log Details Sheet */}
+      <Sheet open={!!selectedLog} onOpenChange={() => setSelectedLog(null)}>
+        <SheetContent className="w-[400px] sm:w-[540px]">
+          <SheetHeader>
+            <SheetTitle>Détails du log</SheetTitle>
+          </SheetHeader>
+          {selectedLog && (
+            <div className="mt-6 space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Action</label>
+                <p className="text-lg font-semibold mt-1">{selectedLog.action}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Entité</label>
+                <p className="text-sm mt-1">{selectedLog.entity}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Détails</label>
+                <p className="text-sm mt-1">{selectedLog.details}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Administrateur</label>
+                <p className="text-sm mt-1">{selectedLog.adminName}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Date et heure</label>
+                <p className="text-sm mt-1">
+                  {new Date(selectedLog.timestamp).toLocaleString("fr-FR")}
+                </p>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
 
       <Footer />
     </div>

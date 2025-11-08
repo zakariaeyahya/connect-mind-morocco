@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
@@ -11,10 +11,12 @@ import {
   DollarSign,
   Clock,
   Star,
-  ArrowLeft,
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const ProDashboard = () => {
+  const [selectedSession, setSelectedSession] = useState<typeof upcomingSessions[0] | null>(null);
+
   const stats = [
     { label: "Patients actifs", value: "24", icon: Users, color: "text-primary" },
     { label: "Séances ce mois", value: "38", icon: Calendar, color: "text-accent" },
@@ -70,22 +72,24 @@ const ProDashboard = () => {
 
       <div className="container mx-auto px-4 lg:px-8 pt-24 pb-12">
         {/* Header */}
-        <div className="mb-8 animate-slide-up">
-          <Link to="/dashboard">
-            <Button variant="ghost" size="sm" className="mb-4">
-              <ArrowLeft className="w-4 h-4" />
-              Retour à la vue patient
-            </Button>
-          </Link>
-          <h1 className="text-3xl lg:text-4xl font-bold mb-2">
+        <div className="mb-8 animate-slide-up flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold mb-2">
             Tableau de bord{" "}
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Professionnel
             </span>
-          </h1>
-          <p className="text-muted-foreground">
-            Gérez vos patients et consultations
-          </p>
+            </h1>
+            <p className="text-muted-foreground">
+              Gérez vos patients et consultations
+            </p>
+          </div>
+          <Button variant="outline" onClick={() => {
+            localStorage.removeItem("minconnect-role");
+            window.location.href = "/auth";
+          }}>
+            Déconnexion
+          </Button>
         </div>
 
         {/* Stats Grid */}
@@ -130,6 +134,7 @@ const ProDashboard = () => {
                   <div
                     key={index}
                     className="p-4 bg-secondary rounded-xl hover:bg-muted/50 transition-smooth cursor-pointer"
+                    onClick={() => setSelectedSession(session)}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
@@ -252,6 +257,70 @@ const ProDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Session Details Sheet */}
+      <Sheet open={!!selectedSession} onOpenChange={() => setSelectedSession(null)}>
+        <SheetContent className="w-[400px] sm:w-[540px]">
+          <SheetHeader>
+            <SheetTitle>Détails de la séance</SheetTitle>
+          </SheetHeader>
+          {selectedSession && (
+            <div className="mt-6 space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent" />
+                <div>
+                  <h3 className="font-semibold text-lg">{selectedSession.patient}</h3>
+                  <p className="text-sm text-muted-foreground">{selectedSession.type}</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Heure</label>
+                  <p className="text-lg font-semibold mt-1 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-primary" />
+                    {selectedSession.time}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Type de séance</label>
+                  <p className="text-sm mt-1">{selectedSession.type}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Statut</label>
+                  <p className="text-sm mt-1">
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      selectedSession.status === "Confirmée"
+                        ? "bg-accent/10 text-accent"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}>
+                      {selectedSession.status}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">Notes</label>
+                  <p className="text-sm mt-1 text-muted-foreground">
+                    Première séance de suivi. Patient montre des progrès significatifs.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-4 border-t">
+                <Button className="w-full gradient-hero shadow-soft">
+                  Rejoindre la séance
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Reprogrammer
+                </Button>
+                <Button variant="destructive" className="w-full">
+                  Annuler la séance
+                </Button>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
 
       <Footer />
     </div>

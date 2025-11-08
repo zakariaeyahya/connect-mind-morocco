@@ -20,6 +20,11 @@ const Navbar = () => {
                      location.pathname === "/calendar" ||
                      location.pathname === "/messages" ||
                      location.pathname === "/wellbeing";
+  
+  const isLandingPage = location.pathname === "/";
+  
+  // Check if user is logged in
+  const isLoggedIn = !!localStorage.getItem("minconnect-role");
 
   // Define role-specific navigation
   const getNavLinks = () => {
@@ -69,24 +74,26 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-smooth"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          {!isLandingPage && (
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-smooth"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Right Section */}
           <div className="hidden md:flex items-center gap-2">
             <LanguageSelector />
             <ThemeToggle />
             {isDashboard && <NotificationBell />}
-            {!isAuthPage && !isDashboard && (
+            {!isAuthPage && !isLoggedIn && (
               <>
                 <Link to="/auth">
                   <Button variant="ghost">Se connecter</Button>
@@ -114,7 +121,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
+        {isMobileMenuOpen && !isLandingPage && (
           <div className="md:hidden py-4 border-t border-border animate-slide-up">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
@@ -127,7 +134,7 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              {!isAuthPage && (
+              {!isAuthPage && !isLoggedIn && (
                 <div className="flex flex-col gap-2 px-4 pt-2">
                   <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full">
