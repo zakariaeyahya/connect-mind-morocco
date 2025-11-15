@@ -13,6 +13,7 @@ import {
   Activity,
   MessageCircle,
   X,
+  FileText,
 } from "lucide-react";
 import { useState } from "react";
 import { users } from "@/data/users";
@@ -227,24 +228,33 @@ const AdminDashboard = () => {
               </Button>
             </Card>
 
-            {/* Quick Actions */}
-            <Card className="p-6 border-none shadow-card gradient-card">
-              <h3 className="font-semibold mb-4">Actions rapides</h3>
-              <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <Users className="w-4 h-4" />
-                  Ajouter un utilisateur
+          {/* Quick Actions */}
+          <Card className="p-6 border-none shadow-card">
+            <h2 className="text-xl font-semibold mb-4">Actions rapides</h2>
+            <div className="space-y-3">
+              <Link to="/calendar">
+                <Button className="w-full gradient-hero shadow-soft justify-start">
+                  <Calendar className="w-4 h-4" />
+                  Ajouter une séance
                 </Button>
+              </Link>
+              <Link to="/professional-messages">
                 <Button variant="outline" className="w-full justify-start">
-                  <Stethoscope className="w-4 h-4" />
-                  Valider un professionnel
+                  <MessageCircle className="w-4 h-4" />
+                  Contacter un patient
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Shield className="w-4 h-4" />
-                  Modération contenu
-                </Button>
-              </div>
-            </Card>
+              </Link>
+              <Button variant="outline" className="w-full justify-start" onClick={() => {
+                toast({
+                  title: "Export en cours",
+                  description: "Vos données seront exportées sous peu",
+                });
+              }}>
+                <FileText className="w-4 h-4" />
+                Exporter les données
+              </Button>
+            </div>
+          </Card>
           </div>
         </div>
       </div>

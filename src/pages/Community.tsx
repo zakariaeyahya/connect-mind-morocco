@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Heart, MessageCircle, Send } from "lucide-react";
+import { Heart, MessageCircle, Send, ArrowLeft } from "lucide-react";
 import { communityPosts } from "@/data/communityPosts";
 import { toast } from "sonner";
 
@@ -35,13 +36,22 @@ const Community = () => {
 
       <div className="container mx-auto px-4 lg:px-8 pt-24 pb-12">
         {/* Header */}
-        <div className="max-w-2xl mx-auto text-center mb-12 animate-slide-up">
-          <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-            Communauté & Soutien
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Un espace bienveillant pour partager et se soutenir mutuellement
-          </p>
+        <div className="max-w-2xl mx-auto mb-12 animate-slide-up">
+          <div className="flex items-center gap-4 mb-6">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+          <div className="text-center">
+            <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+              Communauté & Soutien
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Un espace bienveillant pour partager et se soutenir mutuellement
+            </p>
+          </div>
         </div>
 
         <div className="max-w-4xl mx-auto">

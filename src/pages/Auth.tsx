@@ -18,30 +18,39 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate auth
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get("email") as string;
+
+    // Hardcoded emails
+    const emailRoleMap: Record<string, UserRole> = {
+      "patient@minconnect.ma": "user",
+      "pro@minconnect.ma": "professional",
+      "admin@minconnect.ma": "admin"
+    };
+
+    const role = emailRoleMap[email];
+
     setTimeout(() => {
       setIsLoading(false);
-      localStorage.setItem("minconnect-role", selectedRole);
-      toast.success(
-        action === "login" ? "Connexion réussie !" : "Compte créé avec succès !"
-      );
+      
+      if (!role) {
+        toast.error("Email non reconnu. Utilisez patient@minconnect.ma, pro@minconnect.ma ou admin@minconnect.ma");
+        return;
+      }
+
+      localStorage.setItem("minconnect-role", role);
+      toast.success("Connexion réussie !");
       
       // Redirect based on role
-      if (selectedRole === "professional") {
+      if (role === "professional") {
         navigate("/pro-dashboard");
-      } else if (selectedRole === "admin") {
+      } else if (role === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/dashboard");
       }
     }, 1000);
   };
-
-  const roles = [
-    { value: "user" as UserRole, label: "Patient", icon: User, description: "Accéder à mon espace bien-être" },
-    { value: "professional" as UserRole, label: "Professionnel", icon: Stethoscope, description: "Gérer mes patients et séances" },
-    { value: "admin" as UserRole, label: "Administrateur", icon: Shield, description: "Superviser la plateforme" }
-  ];
 
   return (
     <div className="min-h-screen gradient-subtle flex items-center justify-center px-4 py-12">
@@ -64,38 +73,14 @@ const Auth = () => {
             </p>
           </div>
 
-          {/* Role Selection */}
-          <div className="mb-6">
-            <Label className="text-sm font-medium mb-3 block">Je suis :</Label>
-            <div className="grid gap-3">
-              {roles.map((role) => {
-                const Icon = role.icon;
-                return (
-                  <button
-                    key={role.value}
-                    type="button"
-                    onClick={() => setSelectedRole(role.value)}
-                    className={`p-4 rounded-xl border-2 transition-smooth text-left ${
-                      selectedRole === role.value
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        selectedRole === role.value ? "bg-primary text-white" : "bg-muted"
-                      }`}>
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold">{role.label}</p>
-                        <p className="text-xs text-muted-foreground">{role.description}</p>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+          {/* Info */}
+          <div className="mb-6 p-4 bg-muted/50 rounded-lg text-sm text-muted-foreground">
+            <p className="font-medium mb-2">Emails de test :</p>
+            <ul className="space-y-1 text-xs">
+              <li>• Patient : <code className="text-primary">patient@minconnect.ma</code></li>
+              <li>• Professionnel : <code className="text-primary">pro@minconnect.ma</code></li>
+              <li>• Administrateur : <code className="text-primary">admin@minconnect.ma</code></li>
+            </ul>
           </div>
 
           <Tabs defaultValue="login" className="w-full">
@@ -110,6 +95,7 @@ const Auth = () => {
                   <Label htmlFor="login-email">Email</Label>
                   <Input
                     id="login-email"
+                    name="email"
                     type="email"
                     placeholder="votre@email.com"
                     required
@@ -119,6 +105,7 @@ const Auth = () => {
                   <Label htmlFor="login-password">Mot de passe</Label>
                   <Input
                     id="login-password"
+                    name="password"
                     type="password"
                     placeholder="••••••••"
                     required
@@ -140,6 +127,7 @@ const Auth = () => {
                   <Label htmlFor="signup-name">Nom complet</Label>
                   <Input
                     id="signup-name"
+                    name="name"
                     type="text"
                     placeholder="Votre nom"
                     required
@@ -149,6 +137,7 @@ const Auth = () => {
                   <Label htmlFor="signup-email">Email</Label>
                   <Input
                     id="signup-email"
+                    name="email"
                     type="email"
                     placeholder="votre@email.com"
                     required
@@ -158,6 +147,7 @@ const Auth = () => {
                   <Label htmlFor="signup-password">Mot de passe</Label>
                   <Input
                     id="signup-password"
+                    name="password"
                     type="password"
                     placeholder="••••••••"
                     required
