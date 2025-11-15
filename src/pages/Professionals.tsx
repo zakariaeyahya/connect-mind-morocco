@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Search, MapPin, Star, Check } from "lucide-react";
+import { Search, MapPin, Star, Check, ArrowLeft } from "lucide-react";
 import { professionals } from "@/data/professionals";
 import { toast } from "sonner";
 import {
@@ -39,13 +40,22 @@ const Professionals = () => {
 
       <div className="container mx-auto px-4 lg:px-8 pt-24 pb-12">
         {/* Header */}
-        <div className="max-w-2xl mx-auto text-center mb-12 animate-slide-up">
-          <h1 className="text-3xl lg:text-4xl font-bold mb-4">
-            Trouvez votre professionnel
-          </h1>
-          <p className="text-lg text-muted-foreground">
-            Des thérapeutes qualifiés et bienveillants pour vous accompagner
-          </p>
+        <div className="max-w-2xl mx-auto mb-12 animate-slide-up">
+          <div className="flex items-center gap-4 mb-6">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+          <div className="text-center">
+            <h1 className="text-3xl lg:text-4xl font-bold mb-4">
+              Trouvez votre professionnel
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Des thérapeutes qualifiés et bienveillants pour vous accompagner
+            </p>
+          </div>
         </div>
 
         {/* Search Bar */}

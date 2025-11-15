@@ -5,7 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { partners } from "@/data/partners";
-import { MapPin, Star, ArrowRight } from "lucide-react";
+import { MapPin, Star, ArrowRight, ArrowLeft } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Partners = () => {
@@ -17,16 +17,25 @@ const Partners = () => {
 
       <div className="container mx-auto px-4 lg:px-8 pt-24 pb-12">
         {/* Header */}
-        <div className="text-center mb-12 animate-slide-up">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-            Nos partenaires{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              bien-être
-            </span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Découvrez nos centres partenaires pour compléter votre parcours de bien-être
-          </p>
+        <div className="mb-12 animate-slide-up">
+          <div className="flex items-center gap-4 mb-6">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+          <div className="text-center">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+              Nos partenaires{" "}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                bien-être
+              </span>
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Découvrez nos centres partenaires pour compléter votre parcours de bien-être
+            </p>
+          </div>
         </div>
 
         {/* Partners Grid */}

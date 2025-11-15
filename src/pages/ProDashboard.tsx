@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Card } from "@/components/ui/card";
@@ -11,10 +12,13 @@ import {
   DollarSign,
   Clock,
   Star,
+  FileText,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useToast } from "@/hooks/use-toast";
 
 const ProDashboard = () => {
+  const { toast } = useToast();
   const [selectedSession, setSelectedSession] = useState<typeof upcomingSessions[0] | null>(null);
 
   const stats = [
@@ -240,15 +244,24 @@ const ProDashboard = () => {
             <Card className="p-6 border-none shadow-card gradient-card animate-scale-in">
               <h3 className="font-semibold mb-4">Actions rapides</h3>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <Calendar className="w-4 h-4" />
-                  Bloquer des créneaux
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Users className="w-4 h-4" />
-                  Gérer les patients
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Link to="/calendar">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Calendar className="w-4 h-4" />
+                    Bloquer des créneaux
+                  </Button>
+                </Link>
+                <Link to="/professional-messages">
+                  <Button variant="outline" className="w-full justify-start">
+                    <MessageCircle className="w-4 h-4" />
+                    Voir les messages
+                  </Button>
+                </Link>
+                <Button variant="outline" className="w-full justify-start" onClick={() => {
+                  toast({
+                    title: "Statistiques",
+                    description: "Consultez vos statistiques détaillées",
+                  });
+                }}>
                   <TrendingUp className="w-4 h-4" />
                   Voir les statistiques
                 </Button>

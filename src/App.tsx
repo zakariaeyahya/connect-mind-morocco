@@ -15,6 +15,7 @@ import Partners from "./pages/Partners";
 import ProDashboard from "./pages/ProDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ProfessionalMessages from "./pages/ProfessionalMessages";
+import UserMessages from "./pages/UserMessages";
 import Calendar from "./pages/Calendar";
 import Premium from "./pages/Premium";
 import NotFound from "./pages/NotFound";
@@ -40,7 +41,8 @@ const App = () => (
           <Route path="/partners" element={<Partners />} />
           <Route path="/pro-dashboard" element={<ProDashboard />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/messages" element={<ProfessionalMessages />} />
+          <Route path="/messages" element={<UserMessages />} />
+          <Route path="/professional-messages" element={<ProfessionalMessages />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/premium" element={<Premium />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

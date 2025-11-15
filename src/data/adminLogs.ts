@@ -59,5 +59,55 @@ export const adminLogs: AdminLog[] = [
     adminName: "Admin MinConnect",
     timestamp: "2025-10-20T11:00:00",
     details: "Passage à Premium offert"
+  },
+  {
+    id: 6,
+    action: "Connexion",
+    entity: "Utilisateur",
+    entityId: 1,
+    adminId: 6,
+    adminName: "Admin MinConnect",
+    timestamp: "2025-11-06T09:15:00",
+    details: "Connexion réussie depuis Casablanca"
+  },
+  {
+    id: 7,
+    action: "Création",
+    entity: "Professionnel",
+    entityId: 8,
+    adminId: 6,
+    adminName: "Admin MinConnect",
+    timestamp: "2025-11-05T14:20:00",
+    details: "Nouveau professionnel en attente de validation"
+  },
+  {
+    id: 8,
+    action: "Modification",
+    entity: "Post",
+    entityId: 15,
+    adminId: 6,
+    adminName: "Admin MinConnect",
+    timestamp: "2025-11-04T16:30:00",
+    details: "Contenu mis à jour suite à signalement"
+  },
+  {
+    id: 9,
+    action: "Validation",
+    entity: "Paiement",
+    entityId: 42,
+    adminId: 6,
+    adminName: "Admin MinConnect",
+    timestamp: "2025-11-03T11:45:00",
+    details: "Paiement Premium vérifié et validé"
+  },
+  {
+    id: 10,
+    action: "Activation",
+    entity: "Utilisateur",
+    entityId: 12,
+    adminId: 6,
+    adminName: "Admin MinConnect",
+    timestamp: "2025-11-02T15:00:00",
+    details: "Compte réactivé après vérification"
   }
 ];

@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Play, Headphones, BookOpen, Wind, Heart } from "lucide-react";
+import { Play, Headphones, BookOpen, Wind, Heart, ArrowLeft } from "lucide-react";
 import { exercises, podcasts, articles } from "@/data/exercises";
 import AudioPlayer from "@/components/shared/AudioPlayer";
 import { Progress } from "@/components/ui/progress";
@@ -16,16 +16,25 @@ const Wellbeing = () => {
 
       <div className="container mx-auto px-4 lg:px-8 pt-24 pb-12">
         {/* Header */}
-        <div className="text-center mb-12 animate-slide-up">
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-            Espace{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Bien-être
-            </span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Des ressources pour cultiver votre sérénité au quotidien
-          </p>
+        <div className="mb-12 animate-slide-up">
+          <div className="flex items-center gap-4 mb-6">
+            <Link to="/dashboard">
+              <Button variant="outline" size="icon">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+          <div className="text-center">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+              Espace{" "}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Bien-être
+              </span>
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Des ressources pour cultiver votre sérénité au quotidien
+            </p>
+          </div>
         </div>
 
         {/* Daily Progress */}
